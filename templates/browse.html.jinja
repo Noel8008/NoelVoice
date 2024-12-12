@@ -13,7 +13,12 @@
     {% include "components/navbar.html.jinja" %}
     <h1>Noel's Voice!!!</h1>
     <p>Browse Page</p>
-
+    <form class="container">
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" placeholder="Search" aria-label="Search" name="query">
+            <button class="btn btn-outline-secondary" type="submit">Go</button>
+        </div>
+    </form>
     <main class="container row g-4 mx-auto">
         {% for item in products %}
         <div class="col-4">
