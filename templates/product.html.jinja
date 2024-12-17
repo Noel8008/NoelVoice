@@ -19,13 +19,13 @@
         <div class="card h-100">
           <div class="row">
             <div class="col-md-4 d-flex align-items-center">
-              <img src="{{ product['image'] }}" class="img-fluid rounded-start h-auto w-auto " alt="crocs">
+              <img src="{{ product['image'] }}" class="img-fluid rounded-start h-auto w-auto">
             </div>
             <div class="col-md-8">
               <div class="card-body">
-                <h5 class="card-title">Motivational Speech</h5>
-                <p class="card-text">Pay me for a motivational ya na meeee.</p>
-                <p class="card-text"><small class="text-body-secondary">$9.99 +Free Shipping & Handling</small></p>
+                <h5 class="card-title">{{ product['name'] }}</h5>
+                <p class="card-text">{{ product['description'] }}</p>
+                <p class="card-text"><small class="text-body-secondary">{{ product['price'] }}$</small></p>
                 <button class="btn btn-primary" type="submit">Button</button>
               </div>
             </div>
