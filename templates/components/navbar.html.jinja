@@ -22,12 +22,18 @@
                         Dropdown link
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Action</a></li>
+                        <li><a class="dropdown-item" href="logout">Sign out</a></li>
                         <li><a class="dropdown-item" href="#">Another action</a></li>
                         <li><a class="dropdown-item" href="#">Something else here</a></li>
                     </ul>
                 </li>
             </ul>
+
+            {%if current_user.is_authenticated%}
+                hi {{current_user.username}}
+            {%else%}
+            <a href="/sign_in" class="btn btn-outline-secondary">sign in!</a>
+            {%endif%}
         </div>
     </div>
 </nav>
