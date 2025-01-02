@@ -26,7 +26,14 @@
                 <h5 class="card-title">{{ product['name'] }}</h5>
                 <p class="card-text">{{ product['description'] }}</p>
                 <p class="card-text"><small class="text-body-secondary">{{ product['price'] }}$</small></p>
-                <button class="btn btn-primary" type="submit">Button</button>
+                <form method="post">
+                
+                  <div class="mb-3"></div>
+                    <label for="qty" class="form-label">Quantity</label>
+                    <input type="number" class="form-control" id="qty" min="1" max="2" value="1" name="qty">
+                  </div>
+                <button class="btn btn-primary" type="submit">Add to Cart</button>
+                </form>
               </div>
             </div>
           </div>

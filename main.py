@@ -107,6 +107,22 @@ def product_page(product_id):
     return render_template("product.html.jinja", product = result)
     
 
+@app.route("/product/<product_id>/cart", methods=["POST"])
+@flask_login.login_required
+def add_to_cart(product_id):
+    qty=request.form["qty"]
+    customer_id = flask_login.current_user.id
+
+    conn = connect_db()
+    cursor = conn.cursor()
+    cursor.execute(f"""
+                            
+                        INSERT INTO `Cart`
+                            (`customer_id`, `product_id`, `qty`)
+                        VALUES
+                            ( '{customer_id}', '{product_id}', '{qty}');
+                            """)
+    
 
 
 @app.route("/sign_in", methods=["POST", "GET"])
@@ -139,63 +155,82 @@ def sign_in():
     return render_template("sign_in.html.jinja")
 
 
-
 @app.route('/logout')
 @flask_login.login_required
 def logout():
     flask_login.logout_user()
     return redirect('/')
 
+
 @app.route("/sign_up", methods=["POST", "GET"] )
 def sign_up():
     if flask_login.current_user.is_authenticated:
         return redirect("/")
+    else:
     
-    if request.method == "POST":
-            first_name = request.form["first_name"]
-            last_name = request.form["last_name"]
-            
-            username = request.form["username"]
-            email = request.form["email"]
-            password = request.form["password"]
-            confirm_pass = request.form["confirm_pass"]
-            
-            phone_num = request.form["phone_num"]
-    
-            conn = connect_db()
-
-            cursor = conn.cursor()
-            
-            if password != confirm_pass:
-                flash("Passwords do not match.")
-                return render_template ("sign_up.html.jinja")
-            
-            if len(password) <= 11:
-                flash("Password isnt strong enough")
-                return render_template ("sign_up.html.jinja")
-
-            try:
-                cursor.execute(f"""
-                           
-                    INSERT INTO `Customer`
-                        (`first_name`, `last_name`, `username`, `email`, `password`, `phone_num`)
-                    VALUES
-                           ( '{first_name}', '{last_name}', '{username}', '{email}', '{password}', '{phone_num}'  );
-                           """)
-            except pymysql.err.IntegrityError:
-                flash("Sorry that information is already in use :(")
-            
-            else:
-                return redirect("/sign_in")
-
-            finally:
-                cursor.close()
-                conn.close()
+        if request.method == "POST":
+                first_name = request.form["first_name"]
+                last_name = request.form["last_name"]
                 
+                username = request.form["username"]
+                email = request.form["email"]
+                password = request.form["password"]
+                confirm_pass = request.form["confirm_pass"]
+                
+                phone_num = request.form["phone_num"]
+        
+                conn = connect_db()
+
+                cursor = conn.cursor()
+                
+                if password != confirm_pass:
+                    flash("Passwords do not match.")
+                    return render_template ("sign_up.html.jinja")
+                
+                if len(password) <= 11:
+                    flash("Password isnt strong enough")
+                    return render_template ("sign_up.html.jinja")
+
+                try:
+                    cursor.execute(f"""
+                            
+                        INSERT INTO `Customer`
+                            (`first_name`, `last_name`, `username`, `email`, `password`, `phone_num`)
+                        VALUES
+                            ( '{first_name}', '{last_name}', '{username}', '{email}', '{password}', '{phone_num}'  );
+                            """)
+                except pymysql.err.IntegrityError:
+                    flash("Sorry that information is already in use :(")
+                
+                else:
+                    return redirect("/sign_in")
+
+                finally:
+                    cursor.close()
+                    conn.close()
+                    
                 
     return render_template ("sign_up.html.jinja")
+
 
 @app.route('/cart')
 @flask_login.login_required
 def cart():
-    return "Cart Page"
+    conn = connect_db()
+    cursor = conn.cursor()
+
+    customer_id = flask_login.current_user.id
+
+    cursor.execute(f"""
+                   SELECT `name`, `price`, `qty`, `image`, `product_id`, `Cart`.`id` 
+                   FROM `Cart` 
+                   JOIN `Product` ON `Product`.`id` = `product_id`
+                   WHERE `customer_id` = {customer_id}
+    """)
+
+    results = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template ("cart.html.jinja", products=results)
