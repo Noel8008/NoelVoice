@@ -120,9 +120,12 @@ def add_to_cart(product_id):
                         INSERT INTO `Cart`
                             (`customer_id`, `product_id`, `qty`)
                         VALUES
-                            ( '{customer_id}', '{product_id}', '{qty}');
+                            ( '{customer_id}', '{product_id}', '{qty}')
+                        ON DUPLICATE KEY UPDATE 
+                            `qty` = `qty` + {qty}    
                             """)
     
+    return redirect ("/cart")
 
 
 @app.route("/sign_in", methods=["POST", "GET"])
@@ -216,6 +219,7 @@ def sign_up():
 @app.route('/cart')
 @flask_login.login_required
 def cart():
+
     conn = connect_db()
     cursor = conn.cursor()
 
@@ -230,7 +234,49 @@ def cart():
 
     results = cursor.fetchall()
 
+    price = 0
+
+
+    for product in results:
+       item_total = product['price'] * product['qty']
+       price += item_total
+
+
+
     cursor.close()
     conn.close()
 
     return render_template ("cart.html.jinja", products=results)
+
+@app.route("/cart/<cart_id>/delete", methods=["POST"])
+@flask_login.login_required
+def delete(cart_id):
+   conn = connect_db()
+   cursor = conn.cursor()
+
+
+   cursor.execute(f"DELETE FROM `Cart` WHERE `id`= {cart_id}")
+
+
+   cursor.close()
+   conn.close()
+
+
+   return redirect("/cart")
+
+@app.route("/cart/<cart_id>/update", methods=["POST"])
+@flask_login.login_required
+def updating(cart_id):
+    qty= request.form["qty"]
+    conn = connect_db()
+    cursor = conn.cursor()
+
+
+    cursor.execute(f"UPDATE `Cart` SET `qty`= {qty} WHERE `id` = {cart_id}")
+
+
+    cursor.close()
+    conn.close()
+
+
+    return redirect("/cart")
