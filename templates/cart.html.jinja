@@ -19,7 +19,6 @@
 
 
 
-
     <table class="table table-striped container">
         <thead>
             <tr>
@@ -33,7 +32,8 @@
 
             {% for item in products %}
             <tr>
-                <th scope="row"> <img src="{{ item['image'] }}" class="img-fluid rounded-start h-25 w-25">  {{ item["name"] }}</th>
+                <th scope="row"> <img src="{{ item['image'] }}" class="img-fluid rounded-start h-25 w-25"> {{
+                    item["name"] }}</th>
                 <th scope="row">{{'%.2f' | format(item['price']) }}</th>
                 <td>
                     <form id="updateForm-{{ item['id'] }}" action="/cart/{{ item['id'] }}/update" method="post">
@@ -41,10 +41,12 @@
                             name="qty">
                     </form>
                 </td>
-                <th scope="row">{{'%.2f' | format(item['price'] * item['qty'])  }}</th>
+                <th scope="row">{{'%.2f' | format(item['price'] * item['qty']) }}</th>
                 <td>
                     <button form="updateForm-{{ item['id'] }}" type="submit" class="btn btn-success btn-lg my-1">
-<svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="21" height="21"><path d="M1 7l4.5 4.5L14 3" stroke="currentColor" stroke-linecap="square"></path></svg>                    </button>
+                        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="21" height="21">
+                            <path d="M1 7l4.5 4.5L14 3" stroke="currentColor" stroke-linecap="square"></path>
+                        </svg> </button>
                     <form action="/cart/{{item['id']}}/delete" method="post">
                         <!--Trash Button-->
                         <button type="submit" class="btn btn-danger btn-lg my-1"><svg viewBox="0 0 15 15" fill="none"
@@ -56,10 +58,21 @@
                 </td>
             </tr>
             {% endfor %}
-
         </tbody>
+            <tfoot>
+                <tr>
+                    <td>Total:</td>
+                        <td>Total: {{price}}</td>
+                </tr>
+            </tfoot>
     </table>
     {% endif %}
+
+    <div class="text-end">
+        <a href="/checkout"> <button>
+                Click Here to Checkout.
+            </button></a>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
