@@ -312,3 +312,17 @@ def checkout():
     conn.close()
 
     return render_template ("checkout.html.jinja", products=results, price=price)
+
+@app.route("/products/<product_id>/reviews", methods=['POST'])
+@flask_login.login_required
+def review():
+    
+    conn = connect_db()
+    cursor = conn.cursor()
+    review = request.form["comments"]
+    rating = request.form["rating"]
+    
+    cursor.execute(f"""
+                    
+""")
+
