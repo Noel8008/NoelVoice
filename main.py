@@ -95,8 +95,16 @@ def product_page(product_id):
     cursor = conn.cursor()
 
     cursor.execute(f"SELECT * FROM `Product` WHERE `id` = {product_id};")
-
     result = cursor.fetchone()
+    cursor.execute(f"""
+                    SELECT `Review`.`id`, `product_id`, `customer_id`, `comments`, `rating`, `username` 
+                    FROM `Review` 
+                    JOIN `Customer` ON `customer_id` = `Customer`.`id`
+                    WHERE `product_id`= {product_id};
+
+                   """)
+
+    review = cursor.fetchall()
 
     cursor.close()
     conn.close()
@@ -315,14 +323,24 @@ def checkout():
 
 @app.route("/products/<product_id>/reviews", methods=['POST'])
 @flask_login.login_required
-def review():
+def review(product_id):
     
     conn = connect_db()
     cursor = conn.cursor()
     review = request.form["comments"]
     rating = request.form["rating"]
     
+    
     cursor.execute(f"""
-                    
+                    INSERT INTO `Reviews`
+                        (`comments`, `rating`, `product_id`)
+                    VALUES
+                        ( '{review}', '{rating}', '{product_id}')
+                    ON DUPLICATE KEY UPDATE 
+                        `comments` = {review}, `rating` = {rating}, `product_id` = {product_id}
 """)
 
+    cursor.close()
+    conn.close()
+
+    return redirect (f"/product/{product_id}")
