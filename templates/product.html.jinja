@@ -39,20 +39,40 @@
           </div>
         </div>
       </div>
-      <form id="review" action-="/products/<product_id>/reviews" method="post">
-       <label for="floatingInput">Comments</label>
+      <form id="review" action="/products/{{product['id']}}/reviews" method="post">
+        <label for="floatingInput">Comments</label>
         <input type="txt" name="comments" class="absolute-bottom, container" id="floatingInput"
           placeholder="Input Comment..." required>
-       <label for="floatingInput">Ratings</label>
-        <input id="rating" type="number" name="rating" class="absolute-bottom, container" id="floatingInput" placeholder="1-5"
-          min="1" max="5" required>
-        
-        
+        <label for="floatingInput">Ratings</label>
+        <input id="rating" type="number" name="rating" class="absolute-bottom, container" id="floatingInput"
+          placeholder="1-5" min="1" max="5" required>
+        <p>
+        </p>
+
         <input class="btn btn-primary" type="submit" value="Submit">
       </form>
+      <p>
+      </p>
+      {%for review in reviews%}
+      <span class="border container">
+        <P>
+        </P>
+        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M3 13v.5h1V13H3zm8 0v.5h1V13h-1zm-7 0v-.5H3v.5h1zm2.5-3h2V9h-2v1zm4.5 2.5v.5h1v-.5h-1zM8.5 10a2.5 2.5 0 012.5 2.5h1A3.5 3.5 0 008.5 9v1zM4 12.5A2.5 2.5 0 016.5 10V9A3.5 3.5 0 003 12.5h1zM7.5 3A2.5 2.5 0 005 5.5h1A1.5 1.5 0 017.5 4V3zM10 5.5A2.5 2.5 0 007.5 3v1A1.5 1.5 0 019 5.5h1zM7.5 8A2.5 2.5 0 0010 5.5H9A1.5 1.5 0 017.5 7v1zm0-1A1.5 1.5 0 016 5.5H5A2.5 2.5 0 007.5 8V7zm0 7A6.5 6.5 0 011 7.5H0A7.5 7.5 0 007.5 15v-1zM14 7.5A6.5 6.5 0 017.5 14v1A7.5 7.5 0 0015 7.5h-1zM7.5 1A6.5 6.5 0 0114 7.5h1A7.5 7.5 0 007.5 0v1zm0-1A7.5 7.5 0 000 7.5h1A6.5 6.5 0 017.5 1V0z" fill="currentColor"></path></svg> {{review['username']}}
+        <p>
+        </p>
+        <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15" height="15"><path d="M3.5 11.493H4v-.5h-.5v.5zm0 2.998H3a.5.5 0 00.8.4l-.3-.4zm4-2.998v-.5h-.167l-.133.1.3.4zm-3-7.496H4v1h.5v-1zm6 1h.5v-1h-.5v1zm-6 1.998H4v1h.5v-1zm4 1H9v-1h-.5v1zM3 11.493v2.998h1v-2.998H3zm.8 3.398l4-2.998-.6-.8-4 2.998.6.8zm3.7-2.898h6v-1h-6v1zm6 0c.829 0 1.5-.67 1.5-1.5h-1c0 .277-.223.5-.5.5v1zm1.5-1.5V1.5h-1v8.994h1zM15 1.5c0-.83-.671-1.5-1.5-1.5v1c.277 0 .5.223.5.5h1zM13.5 0h-12v1h12V0zm-12 0C.671 0 0 .67 0 1.5h1c0-.277.223-.5.5-.5V0zM0 1.5v8.993h1V1.5H0zm0 8.993c0 .83.671 1.5 1.5 1.5v-1a.499.499 0 01-.5-.5H0zm1.5 1.5h2v-1h-2v1zm3-6.996h6v-1h-6v1zm0 2.998h4v-1h-4v1z" fill="currentColor"></path></svg> {{review['comments']}}
+        <p>
+        </p>
+        {{review['rating']}}/5 <svg viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" width="15"
+          height="15">
+          <path
+            d="M7.5 12.04l-4.326 2.275L4 9.497.5 6.086l4.837-.703L7.5 1l2.163 4.383 4.837.703L11 9.497l.826 4.818L7.5 12.041z"
+            stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+      </span>
+      {%endfor%}
     </main>
   </div>
-
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"

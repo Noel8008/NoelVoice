@@ -112,7 +112,7 @@ def product_page(product_id):
     if result is None:
         abort(404)
 
-    return render_template("product.html.jinja", product = result)
+    return render_template("product.html.jinja", product = result, reviews = review)
     
 
 @app.route("/product/<product_id>/cart", methods=["POST"])
@@ -329,18 +329,48 @@ def review(product_id):
     cursor = conn.cursor()
     review = request.form["comments"]
     rating = request.form["rating"]
-    
-    
+
+    customer_id = flask_login.current_user.id
+
     cursor.execute(f"""
-                    INSERT INTO `Reviews`
-                        (`comments`, `rating`, `product_id`)
+                    INSERT INTO `Review`
+                        (`comments`, `rating`, `product_id`, `customer_id`)
                     VALUES
-                        ( '{review}', '{rating}', '{product_id}')
+                        ( '{review}', '{rating}', '{product_id}', '{customer_id}')
                     ON DUPLICATE KEY UPDATE 
-                        `comments` = {review}, `rating` = {rating}, `product_id` = {product_id}
+                        `comments` = '{review}', `rating` = '{rating}'
 """)
 
     cursor.close()
     conn.close()
 
     return redirect (f"/product/{product_id}")
+
+
+@app.route("/checkout/buy")
+@flask_login.login_required
+def buy():
+    
+    conn = connect_db()
+    cursor = conn.cursor()
+    customer_id = flask_login.current_user.id
+
+    cursor.execute(f"""
+                    INSERT INTO `Sale`
+                        (`customer_id`)
+                    VALUES
+                        ('{customer_id}')
+                    ON DUPLICATE KEY UPDATE
+                        `customer_id` = '{customer_id}'
+""")
+    
+    cursor.close()
+    conn.close()
+
+    return redirect (f"/thankyou")
+
+@app.route("/thankyou")
+@flask_login.login_required
+def thanks():
+   
+    return render_template("thankyou.html.jinja")
