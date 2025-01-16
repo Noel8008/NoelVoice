@@ -254,7 +254,7 @@ def cart():
     cursor.close()
     conn.close()
 
-    return render_template ("cart.html.jinja", products=results)
+    return render_template ("cart.html.jinja", products=results, price = price)
 
 @app.route("/cart/<cart_id>/delete", methods=["POST"])
 @flask_login.login_required
