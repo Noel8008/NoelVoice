@@ -363,6 +363,9 @@ def buy():
                     ON DUPLICATE KEY UPDATE
                         `customer_id` = '{customer_id}'
 """)
+   
+    cursor.execute(f"DELETE FROM `Cart` WHERE `customer_id`= {customer_id}")
+
     
     cursor.close()
     conn.close()

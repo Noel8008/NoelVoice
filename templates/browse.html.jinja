@@ -24,7 +24,7 @@
     <main class="container row g-4 mx-auto">
         {% for item in products %}
         <div class="col-4">
-            <div class="card">
+            <div class="card" data-bs-theme="dark">
                 <img src="{{ item['image'] }}" class="card-img-top" alt="{{ item['name'] }}">
                 <div class="card-body">
                     <h5 class="card-title">{{ item["name"] }} </h5>
